@@ -9,7 +9,6 @@ function DSNV() {
         console.log(this.arrNV);
         for (var i = 0; i < this.arrNV.length; i++) {
             var empUsername = this.arrNV[i].username
-            // console.log(empUsername, employeeUsername);
             if (empUsername === employeeUsername) {
                 return i;
             }

@@ -1,3 +1,5 @@
+var dsnv = new DSNV();
+
 function getElement(selector) {
     return document.querySelector(selector);
 }
@@ -10,22 +12,23 @@ function isEmptyForm() {
     var domPassword = getElement('#password')
     var domDatepicker = getElement('#datepicker')
     var domGioLam = getElement('#gioLam')
+    var domChucVu = getElement('#chucvu')
     var domLuongCB = getElement('#luongCB')
     if (domtknv.value.trim() === '') {
         getElement('#tbTKNV').innerHTML = 'Không được bỏ trống dữ liệu này';
         getElement('#tbTKNV').style.display = 'block';
-        domtknv.focus();    
+        domtknv.focus();
         isEmpty = false;
-    }else{
+    } else {
         isEmpty = true;
     }
-    
+
     if (domName.value.trim() === '') {
         getElement('#tbTen').innerHTML = 'Không được bỏ trống dữ liệu này';
         getElement('#tbTen').style.display = 'block';
         domName.focus();
         isEmpty = false;
-    }else{
+    } else {
         isEmpty = true;
     }
 
@@ -34,7 +37,7 @@ function isEmptyForm() {
         getElement('#tbEmail').style.display = 'block';
         domEmail.focus();
         isEmpty = false;
-    }else{
+    } else {
         isEmpty = true;
     }
 
@@ -43,7 +46,7 @@ function isEmptyForm() {
         getElement('#tbMatKhau').style.display = 'block';
         domPassword.focus();
         isEmpty = false;
-    }else{
+    } else {
         isEmpty = true;
     }
 
@@ -52,7 +55,7 @@ function isEmptyForm() {
         getElement('#tbNgay').style.display = 'block';
         domDatepicker.focus();
         isEmpty = false;
-    }else{
+    } else {
         isEmpty = true;
     }
 
@@ -61,7 +64,16 @@ function isEmptyForm() {
         getElement('#tbGiolam').style.display = 'block';
         domGioLam.focus();
         isEmpty = false;
-    }else{
+    } else {
+        isEmpty = true;
+    }
+
+    if (domChucVu.value == 0) {
+        getElement('#tbChucVu').innerHTML = 'Vui lòng chọn chức vụ';
+        getElement('#tbChucVu').style.display = 'block';
+        domChucVu.focus();
+        isEmpty = false;
+    } else {
         isEmpty = true;
     }
 
@@ -70,7 +82,7 @@ function isEmptyForm() {
         getElement('#tbLuongCB').style.display = 'block';
         domLuongCB.focus();
         isEmpty = false;
-    }else{
+    } else {
         isEmpty = true;
     }
 
@@ -79,7 +91,7 @@ function isEmptyForm() {
 
 function checkValidatorForm() {
     var bool = false;
-    
+
     var domtknv = getElement('#tknv')
     domtknv.onchange = function () {
         if (!(domtknv.value.length >= 4 && domtknv.value.length <= 6)) {
@@ -94,8 +106,8 @@ function checkValidatorForm() {
     // Tên nhân viên phải là chữ, không để trống
     var domName = getElement('#name')
     domName.onchange = function () {
-        const regex = /[0-9]/;
-        if (domName.value.match(regex)) {
+        const regex = /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" + "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" + "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$/;
+        if (!regex.test(domName.value)) {
             bool = false;
             getElement('#tbTen').innerHTML = 'Tên nhân viên phải là chữ, không chứa số';
             getElement('#tbTen').style.display = 'block';
@@ -107,9 +119,9 @@ function checkValidatorForm() {
     // Email phải đúng định dạng, không để trống
     var domEmail = getElement('#email')
     domEmail.onchange = function () {
-        var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+        var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         // console.log(regex.test(domEmail.value));
-        if (!regex.test(domEmail.value) ) {
+        if (!regex.test(domEmail.value)) {
             bool = false;
             getElement('#tbEmail').innerHTML = 'Email không hợp lệ';
             getElement('#tbEmail').style.display = 'block';
@@ -120,7 +132,7 @@ function checkValidatorForm() {
     // Mật khẩu phải đúng định dạng, không để trống
     var domPassword = getElement('#password')
     domPassword.onchange = function () {
-        var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{0,}$/ ;
+        var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{0,}$/;
         // console.log(regex.test(domPassword.value) , domPassword.value.match(re) );
         console.log(domPassword.value);
         if (!regex.test(domPassword.value) || !(domPassword.value.length >= 6 && domPassword.value.length <= 10)) {
@@ -135,9 +147,9 @@ function checkValidatorForm() {
     // ngày phải đúng định dạng, không để trống
     var domDay = getElement('#datepicker')
     domDay.onchange = function () {
-        var regex = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/ ;
+        var regex = /(?:(?:(?:0[1-9]|1[0-2])\/(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])\/(?:29|30)|(?:0[13578]|1[02])\/31)\/[1-9]\d{3}|02\/29(?:\/[1-9]\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00))/;
         // console.log(regex.test(domDay.value));
-        if (!regex.test(domDay.value) ) {
+        if (!regex.test(domDay.value)) {
             bool = false;
             getElement('#tbNgay').innerHTML = 'Định dạng ngày tháng năm không hợp lệ';
             getElement('#tbNgay').style.display = 'block';
@@ -146,17 +158,44 @@ function checkValidatorForm() {
         }
     }
     // ngày phải đúng định dạng, không để trống
-    var domSalaryCB = getElement('#luongCB')
 
+
+    var domChucVu = getElement('#chucvu')
+    domChucVu.onchange = function () {
+        var chucVu = parseInt(domChucVu.value)
+        // console.log("chucVu: ", chucVu);
+        if ((chucVu == 0)) {
+            bool = false;
+            getElement('#tbChucVu').innerHTML = 'Vui lòng chọn chức vụ';
+            getElement('#tbChucVu').style.display = 'block';
+        } else {
+            getElement('#tbChucVu').style.display = 'none';
+        }
+    }
+
+    var domSalaryCB = getElement('#luongCB')
     domSalaryCB.onchange = function () {
         var salaryCB = parseInt(domSalaryCB.value)
         console.log("salaryCB: ", salaryCB);
-        if (!(salaryCB >= 1000000 && salaryCB <= 20000000 ) ) {
+        if (!(salaryCB >= 1000000 && salaryCB <= 20000000)) {
             bool = false;
             getElement('#tbLuongCB').innerHTML = 'Lương cơ bản không hợp lệ ( 1 000 000 - 20 000 000 )';
             getElement('#tbLuongCB').style.display = 'block';
         } else {
             getElement('#tbLuongCB').style.display = 'none';
+        }
+    }
+
+    var domGioLam = getElement('#gioLam')
+    domGioLam.onchange = function () {
+        var gioLam = parseInt(domGioLam.value)
+        console.log("gioLam: ", gioLam);
+        if (!(gioLam >= 80 && gioLam <= 200)) {
+            bool = false;
+            getElement('#tbGiolam').innerHTML = 'Giờ làm không hợp lệ ( 80 - 200 )';
+            getElement('#tbGiolam').style.display = 'block';
+        } else {
+            getElement('#tbGiolam').style.display = 'none';
         }
     }
 
@@ -171,7 +210,7 @@ function getThongTinNV() {
     var _workDay = getElement('#datepicker').value
     var _salary = +getElement('#luongCB').value
     var _office = getElement('#chucvu').value
-    
+
     var _workTime = +getElement('#gioLam').value
 
     // tạo đối tượng sinh viên từ thông tin lấy từ user
@@ -179,11 +218,10 @@ function getThongTinNV() {
     var employee = new Employee(
         _username, _pass, _name, _email, _workDay, _office, _salary, _workTime
     )
+    return employee;
 
-    return employee ;
 }
 
-var dsnv = new DSNV();
 getLocalStorage()
 
 function setLocalStorage() {
@@ -192,26 +230,30 @@ function setLocalStorage() {
     localStorage.setItem("DSNV", data)
 }
 getElement('#btnThem').onclick = function () {
+    var tb = document.getElementsByClassName("sp-thongbao")
+    for (let i = 0; i < tb.length; i++) {
+        tb[i].style.display = 'none'
+    }
     document.getElementById("myForm").reset();
 
     checkValidatorForm()
-    
+
     var date = new Date();
-    var DMY = date.getDay() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
+    var DMY = String(date.getMonth() + 1).padStart(2, '0') + '/' + String(date.getDate()).padStart(2, '0') + '/' + date.getFullYear()
     getElement('#datepicker').value = DMY;
 
 }
-function renderListEmployee() {
+function renderListEmployee(arrNV = dsnv.arrNV) {
     var content = '';
 
-    for (var i = 0; i < dsnv.arrNV.length; i++) {
-        var employee = dsnv.arrNV[i];
-        var valueOffice 
+    for (var i = 0; i < arrNV.length; i++) {
+        var employee = arrNV[i];
+        var valueOffice
         if (employee.office === '1') {
             valueOffice = 'Sếp'
-        }else if (employee.office === '2') {
+        } else if (employee.office === '2') {
             valueOffice = 'Trưởng phòng'
-        }else if (employee.office === '3') {
+        } else if (employee.office === '3') {
             valueOffice = 'Nhân viên'
         }
         // console.log(valueOffice,'ágvjhbd');
@@ -277,29 +319,46 @@ function getLocalStorage() {
 }
 //add employee
 getElement('#btnThemNV').onclick = function () {
-    // console.log(isEmptyForm);
-    if (isEmptyForm()) {
-        var employee = getThongTinNV()
+    var username = getElement("#tknv").value
+    let getFirst = dsnv.getAllEmployeeByUsername(username)
 
-        dsnv.addEmployee(employee);// add thêm Sinh viên
-        renderListEmployee();
+    console.log("getFirst: ", getFirst);
+    if (getFirst === -1) {
+        getElement("#tbTKNV").style.display = "none"
+        // console.log(isEmptyForm);
+        if (isEmptyForm()) {
+            var employee = getThongTinNV()
 
-        setLocalStorage();
+            dsnv.addEmployee(employee);// add thêm Sinh viên
+            renderListEmployee();
+
+            setLocalStorage();
+        }
+        return true;
+    } else {
+        getElement("#tbTKNV").style.display = "block"
+        getElement("#tbTKNV").innerHTML = "Trùng Tài khoản"
+        return false
     }
 
     
-}
-getElement('#edit').onclick = function () {
-   var tb =  document.getElementsByClassName("sp-thongbao")
-   tb.style.display = "none";
-    
+
+
 }
 function editNV(empUsername) {
+
+    var tb = document.getElementsByClassName("sp-thongbao")
+    for (let i = 0; i < tb.length; i++) {
+        tb[i].style.display = 'none'
+    }
+
     var index = dsnv.getAllEmployeeByUsername(empUsername)
 
     var nv = dsnv.arrNV[index]
     // đẩy data lên input
     getElement('#tknv').value = nv.username
+    getElement('#tknv').disabled = true;
+
     getElement('#name').value = nv.name
     getElement('#email').value = nv.email
     getElement('#password').value = nv.password
@@ -317,31 +376,46 @@ function editNV(empUsername) {
 }
 // Cập nhật lại nhân viên
 getElement('#btnCapNhat').onclick = function () {
-    if (isEmptyForm()) {
-        // Lấy lại thông tin sinh viên sau khi chỉnh sửa xong
-        var employee = getThongTinNV()
-        // cập nhật sinh viên
-        dsnv.updateEmployee(employee)
 
-        //  render lại UI
-        renderListEmployee()    
+    isEmptyForm()
+    checkValidatorForm()
+    // Lấy lại thông tin sinh viên sau khi chỉnh sửa xong
+    var employee = getThongTinNV()
+    // cập nhật sinh viên
+    dsnv.updateEmployee(employee)
 
-        // cập nhật data local
-        setLocalStorage()
-    }
-    
+    //  render lại UI
+    renderListEmployee()
+
+    // cập nhật data local
+    setLocalStorage()
+
+
 }
 
 
 function deleteNV(xoaNV) {
-   
+
     dsnv.deleteEmployee(xoaNV)
     renderListEmployee();
     setLocalStorage();
 }
 // ------------------------------------------
 
+getElement('#searchName').addEventListener('keyup', function () {
+    var valueSearch = getElement('#searchName').value.toLowerCase()
+    var arrNVSearch = []
+    for (var i = 0; i < dsnv.arrNV.length; i++) {
+        var xepLoaiNV = dsnv.arrNV[i].calcRank().toLowerCase()
+        // console.log(xepLoaiNV)
+        if (xepLoaiNV.indexOf(valueSearch) !== -1) {
+            arrNVSearch.push(dsnv.arrNV[i])
+        }
+    }
 
+    // console.log(arrNVSearch)
+    renderListEmployee(arrNVSearch)
+})
 
 
 

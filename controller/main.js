@@ -230,6 +230,9 @@ function setLocalStorage() {
     localStorage.setItem("DSNV", data)
 }
 getElement('#btnThem').onclick = function () {
+    getElement('#tknv').disabled = false;
+    getElement('#btnCapNhat').disabled = true;
+
     var tb = document.getElementsByClassName("sp-thongbao")
     for (let i = 0; i < tb.length; i++) {
         tb[i].style.display = 'none'
@@ -376,6 +379,7 @@ function editNV(empUsername) {
 }
 // Cập nhật lại nhân viên
 getElement('#btnCapNhat').onclick = function () {
+    getElement('#btnCapNhat').disabled = false;
 
     isEmptyForm()
     checkValidatorForm()

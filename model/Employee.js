@@ -26,7 +26,7 @@ function Employee( _username , _pass, _name, _email, _workDay, _office, _salary,
     this.calcRank = function () {
         var xepLoai = '';
         var workTime = this.workTime ;
-        if (this.office != '1') {
+        if (this.office != '1' || this.office != '2' ) {
              if (workTime >= 192 ) {
                 xepLoai = 'Xuất sắc';
             }else if (workTime >= 176) {
